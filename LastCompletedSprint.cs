@@ -28,13 +28,21 @@ namespace JIRADataExtractor
             long sprintID = getLastClosedSprintID(boardId);
             string jSONResponse = JIRAConnectionHandler.execute("/rest/agile/1.0/sprint/" + sprintID);
             Sprint sprint = JToken.Parse(jSONResponse).ToObject<Sprint>();
-            jSONResponse = JIRAConnectionHandler.execute("/rest/agile/1.0/sprint/" + sprintID + "/issue?fields=epic,priority,status,created");
+            jSONResponse = JIRAConnectionHandler.execute("/rest/agile/1.0/sprint/" + sprintID + "/issue?fields=issuetype,summary,created,status,priority,epic");
+            // TO DO : Issues that were removed from the sprint are not returned
             IssuesInSprint issuesInSprint = JToken.Parse(jSONResponse).ToObject<IssuesInSprint>();
             StringBuilder issues = new StringBuilder();
             foreach (Issue issue in issuesInSprint.Issues)
             {
                 string dateAdded = getDateAddedToSprint(sprint.Name, issue.Id);
-                issues.Append("\n\t").Append(issue.Key).Append(",").Append(issue.Fields.Status.Name).Append(",").Append(dateAdded);
+                // TO DO : Add issue type, de
+                issues.Append("\n").Append(issue.Key)
+                    .Append(",").Append(issue.Fields.Issuetype.Name)
+                    .Append(",").Append(issue.Fields.Summary)
+                    .Append(",").Append(issue.Fields.Status.Name)
+                    .Append(",").Append(issue.Fields.Epic)
+                    .Append(",").Append(issue.Fields.Priority.Name)
+                    .Append(",").Append(dateAdded);
             }
             Log.Information("{sprintName} ({startDate} to {endate})", sprint.Name, sprint.StartDate.Value.Date.ToString(), sprint.EndDate.Value.Date.ToString());
             Log.Information("\tIssue count: {issueCount}.", issuesInSprint.Issues.Length);
@@ -101,7 +109,7 @@ namespace JIRADataExtractor
             {
                 throw ex;
             }
-            Log.Information("The last closed sprint for board {boardId} is sprint {sprintID}, closed {closedDate}.", boardID, sprintID, closed);
+            Log.Information("The last closed sprint for board {boardId} is sprint with id {sprintID}, closed {closedDate}.", boardID, sprintID, closed);
             return sprintID;
         }
     }

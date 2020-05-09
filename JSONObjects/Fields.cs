@@ -7,6 +7,12 @@ namespace JIRADataExtractor.JSONObjects
 {
     class Fields
     {
+        [JsonProperty("summary")]
+        public string Summary { get; set; }
+
+        [JsonProperty("issuetype")]
+        public Issuetype Issuetype { get; set; }
+
         [JsonProperty("epic")]
         public object Epic { get; set; }
 
