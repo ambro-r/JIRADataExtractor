@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,7 +12,7 @@ namespace JIRADataExtractor
         {
             SetupStaticLogger();
             LastCompletedSprint jIRA = new LastCompletedSprint(email, apiToken, baseURL);
-            jIRA.sprints(42);
+            jIRA.sprints(44);
         }
 
         private static void SetupStaticLogger()
