@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "JIRA Data Extractor": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "development"
+      }
+    }
+  }
+}
