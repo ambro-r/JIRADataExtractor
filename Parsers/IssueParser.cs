@@ -24,14 +24,24 @@ namespace JIRADataExtractor.Parsers
 
         public Issue GetIssue(long issueID)
         {
+            return GetIssue(issueID, new Dictionary<string, string>());
+        }
+
+        public Issue GetIssue(long issueID, Dictionary<string, string> customElements)
+        {
             Log.Information("Getting issue with id {issueID}", issueID);
-            return ParseJSON(Execute(issueID.ToString()));
+            return ParseJSON(Execute(issueID.ToString()), customElements);
         }
 
         public Issue GetIssue(string issueKey)
         {
+            return GetIssue(issueKey, new Dictionary<string, string>());
+        }
+
+        public Issue GetIssue(string issueKey, Dictionary<string, string> customElements)
+        {
             Log.Information("Getting issue with key {issueKey}", issueKey);
-            return ParseJSON(Execute(issueKey));
+            return ParseJSON(Execute(issueKey), customElements);
         }
 
         private string Execute(string issueIdOrKey)
@@ -39,14 +49,14 @@ namespace JIRADataExtractor.Parsers
             return JIRAConnectionHandler.execute("/rest/api/3/issue/" + issueIdOrKey);
         }
 
-        private Issue ParseJSON(String jSONResponse)
+        private Issue ParseJSON(String jSONResponse, Dictionary<string, string> customElements)
         { 
             if(Log.IsEnabled(LogEventLevel.Debug))
             {
                 Log.Debug("{jsonData}", JObject.Parse(jSONResponse).ToString());
             }
             var settings = new JsonSerializerSettings();
-            settings.Converters.Add(new NestedJSONConverter<Issue>());
+            settings.Converters.Add(new NestedJSONConverter<Issue>(customElements));
             return JsonConvert.DeserializeObject<Issue>(jSONResponse, settings);
         }
 
