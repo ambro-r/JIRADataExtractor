@@ -5,11 +5,18 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
+using Serilog;
 
 namespace JIRADataExtractor.Converters
 {
     class NestedJSONConverter<T> : JsonConverter where T : new()
     {
+
+        private Dictionary<string, string> CustomElements;
+        public NestedJSONConverter(Dictionary<string, string> customFields) {
+            CustomElements = customFields;
+        }
+
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(T);
@@ -17,7 +24,7 @@ namespace JIRADataExtractor.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var daat = JObject.Load(reader);
+            var root = JObject.Load(reader);
             var result = new T();
 
             foreach (var prop in result.GetType().GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance))
@@ -36,30 +43,34 @@ namespace JIRADataExtractor.Converters
                     propName = prop.Name;
                 }
                 //split by the delimiter, and traverse recursevly according to the path
-                var nests = propName.Split('/');
+                var elements = propName.Split('/');
                 object propValue = null;
-                JToken token = null;
-                for (var i = 0; i < nests.Length; i++)
+                JToken jToken = null;
+                for (var i = 0; i < elements.Length; i++)
                 {
-                    if (token == null)
+                    string element = elements[i];
+                    if (element.StartsWith("custom.element."))
                     {
-                        token = daat[nests[i]];
+                        Log.Debug("Custom element {element} found in JsonProperty.", element);
+                        element = element.Substring("custom.element.".Length);
+                        element = CustomElements.ContainsKey(element) ? CustomElements[element] : "";
                     }
-                    else
+                    Log.Verbose("{0}Getting {element} from jSON.", "".PadRight(i) ,element);
+                    jToken = jToken == null ? root[element] : jToken[element];
+
+                    if (jToken == null)
                     {
-                        token = token[nests[i]];
-                    }
-                    if (token == null)
-                    {
-                        //silent fail: exit the loop if the specified path was not found
+                        Log.Debug("No token found for element {element} at position {i} in the tree, will not process this branch any further.", element, i);
                         break;
                     }
                     else
                     {
-                        //store the current value
-                        if (token is JValue)
+                        if (jToken is JValue)
                         {
-                            propValue = ((JValue)token).Value;
+                            propValue = ((JValue)jToken).Value;
+                        } else if (jToken is JArray)
+                        {
+                            propValue = ((JArray)jToken).Select(ja => (string)ja).ToArray();        
                         }
                     }
                 }
@@ -74,6 +85,9 @@ namespace JIRADataExtractor.Converters
                     else if (prop.PropertyType == typeof(Int64))
                     {
                         prop.SetValue(result, Convert.ToInt64(propValue));
+                    } else if(prop.PropertyType == typeof(DateTimeOffset))
+                    {
+                        prop.SetValue(result, Convert.ToDateTime(propValue));
                     }
                     else
                     {
