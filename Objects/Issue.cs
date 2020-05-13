@@ -9,8 +9,8 @@ namespace JIRADataExtractor
     [JsonObject]
     class Issue
     {
-        [JsonProperty("created")]
-        public DateTimeOffset? CreatedDate { get; set; }
+        [JsonProperty("fields/created")]
+        public DateTime CreatedDate { get; set; }
         [JsonProperty("id")]
         public long Id { get; set; }
         [JsonProperty("key")]
@@ -35,12 +35,13 @@ namespace JIRADataExtractor
         public string Status { get; set; }
         [JsonProperty("fields/issuetype/name")]
         public string Type { get; set; }
-        public Dictionary<String, String> CustomFields { get; set; } 
+        [JsonProperty("fields/custom.element.Sprint")]
+        public string[] Sprint { get; set; }
 
         public Issue()
         {
-            CustomFields = new Dictionary<string, string>();
-        }
+            Sprint = new string[] { };
+        }        
 
         private string toCSV()
         {
@@ -58,7 +59,7 @@ namespace JIRADataExtractor
                 .Append(string.Format(", Parent(key={0};type={1};name:{2})", ParentKey, ParentType, ParentName))
                 .Append(string.Format(", Project(key={0};name:{1};category:{2})", ProjectKey, ProjectName, ProjectCategory))
                 .Append(", Summary=").Append(Summary)
-                .Append(", CustomFields=(").Append(string.Join("'", CustomFields.Select(a => $"{a.Key}:{a.Value}"))).Append(")")
+                .Append(string.Format(", Sprint=({0})", string.Join(";", Sprint.Select(a => a))))
                 .Append("]").ToString();
         }
     }
