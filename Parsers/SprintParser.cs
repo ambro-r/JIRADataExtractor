@@ -1,7 +1,4 @@
-﻿using JIRADataExtractor.JSONObjects;
-using JIRADataExtractor.JSONQueryResultsObjects;
-using Newtonsoft.Json.Linq;
-using Serilog;
+﻿using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +7,8 @@ namespace JIRADataExtractor
 {
     class SprintParser
     {
+        // TO DO: Need to rethink and rework this
+
         private JIRAConnectionHandler JIRAConnectionHandler;
         private SprintParser() { }
         public SprintParser(JIRAConnectionHandler jIRAConnectionHandler)
@@ -57,21 +56,13 @@ namespace JIRADataExtractor
         private List<Issue> ParseJSON(String jSONResponse, String[] customFields)
         {
             List<Issue> issues = new List<Issue>();
+            /*
             var jsonData = JObject.Parse(jSONResponse);
             Console.WriteLine(jsonData.ToString());
             foreach (JObject issueJSON in jsonData["issues"])
             {
                 Issue issue = new Issue();
-                issue.Id = (long)issueJSON["id"];
-                issue.Key = (string)issueJSON["key"];
-
-                JObject fieldJSON = (JObject) issueJSON["fields"];
-                issue.Summary = (string)fieldJSON["summary"];
-                issue.CreatedDate = (DateTimeOffset)fieldJSON["created"];
-                issue.Priority = (string)fieldJSON["priority"]["name"];
-                issue.Status = (string)fieldJSON["status"]["name"];
-                issue.Type = (string)fieldJSON["issuetype"]["name"];
-
+              
 
                 Dictionary<string, string> custom = new Dictionary<string, string>();
                 foreach (string field in customFields)
@@ -83,8 +74,15 @@ namespace JIRADataExtractor
                 issues.Add(issue);
             }
             Log.Information("{issueCount} issues found in sprint.", issues.Count);
+            */
             return issues;
         }
+        /*
+             "customfield_10016": [
+      "com.atlassian.greenhopper.service.sprint.Sprint@b1fce5f[id=65,rapidViewId=42,state=ACTIVE,name=Phoenix Iteration 02,goal=,startDate=2020-05-11T18:00:00.000Z,endDate=2020-05-22T15:00:00.000Z,completeDate=<null>,sequence=65]",
+      "com.atlassian.greenhopper.service.sprint.Sprint@40dc7d41[id=63,rapidViewId=42,state=CLOSED,name=Phoenix Iteration 01,goal=To finish all items committed too.,startDate=2020-04-28T09:00:00.000Z,endDate=2020-05-08T15:00:00.000Z,completeDate=2020-05-08T17:28:29.905Z,sequence=63]"
+    ],
+    */
 
     }
 }

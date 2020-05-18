@@ -35,7 +35,7 @@ namespace JIRADataExtractor
         public string Status { get; set; }
         [JsonProperty("fields/issuetype/name")]
         public string Type { get; set; }
-        [JsonProperty("fields/custom.element.Sprint")]
+        [JsonProperty("fields/custom.element.sprint")]
         public string[] Sprint { get; set; }
 
         public Issue()

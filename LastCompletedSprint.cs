@@ -1,7 +1,4 @@
-﻿
-using JIRADataExtractor.JSONObjects;
-using JIRADataExtractor.JSONQueryResultsObjects;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 using Serilog;
 using System;
@@ -22,9 +19,10 @@ namespace JIRADataExtractor
         {
             JIRAConnectionHandler = new JIRAConnectionHandler(userName, password, baseURL);
         }
-
+        /*
         public void sprints(long boardId)
         {
+          
             long sprintID = getLastClosedSprintID(boardId);
             string jSONResponse = JIRAConnectionHandler.execute("/rest/agile/1.0/sprint/" + sprintID);
             Sprint sprint = JToken.Parse(jSONResponse).ToObject<Sprint>();
@@ -32,7 +30,7 @@ namespace JIRADataExtractor
             // TO DO : Issues that were removed from the sprint are not returned
             IssuesInSprint issuesInSprint = JToken.Parse(jSONResponse).ToObject<IssuesInSprint>();
             StringBuilder issues = new StringBuilder();
-            foreach (Issue issue in issuesInSprint.Issues)
+            foreach (JSONObjects.Issue issue in issuesInSprint.Issues)
             {
                 string dateAdded = getDateAddedToSprint(sprint.Name, issue.Id);
                 // TO DO : Add issue type, de
@@ -112,5 +110,6 @@ namespace JIRADataExtractor
             Log.Information("The last closed sprint for board {boardId} is sprint with id {sprintID}, closed {closedDate}.", boardID, sprintID, closed);
             return sprintID;
         }
+        */
     }
 }
