@@ -1,4 +1,6 @@
-﻿using JIRADataExtractor.Parsers;
+﻿using JIRADataExtractor.Constants;
+using JIRADataExtractor.Objects;
+using JIRADataExtractor.Parsers;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -34,23 +36,20 @@ namespace JIRADataExtractor
         public List<Issue> GetSprintIssues(String sprintName, String[] customFields)
         {
             Log.Information("Getting issues for sprint with name {sprintName}", sprintName);
-            return ParseJSON(Execute("/rest/api/3/search?jql=Sprint=\"" + sprintName + "\"", customFields), customFields);
+            string jqlFilter = GetJQLFilter(new JQLFilter("Sprint", Comparison.EQUAL_TO, sprintName));
+            return ParseJSON(Execute("/rest/api/3/search?" + jqlFilter, customFields), customFields);
         }
 
         private string Execute(String unfilteredURI, String[] customFields)
         {
-            string fields = "&fields=issuetype,parent,summary,created,priority,status,project";
-            foreach (string field in customFields)
-            {
-                fields += "," + field;
-            }
-            Log.Debug("Field filter applied is {fields}", fields);
-            return JIRAConnectionHandler.execute(unfilteredURI);// + fields);
+            return JIRAConnectionHandler.execute(unfilteredURI);
         }
 
         private List<Issue> ParseJSON(String jSONResponse, String[] customFields)
         {
+
             List<Issue> issues = new List<Issue>();
+            Console.WriteLine(jSONResponse);
             /*
             var jsonData = JObject.Parse(jSONResponse);
             Console.WriteLine(jsonData.ToString());
