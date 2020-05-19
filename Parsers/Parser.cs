@@ -34,7 +34,6 @@ namespace JIRADataExtractor.Parsers
             {
                 jql.Insert(0, "jql=");
             }
-            Log.Debug("JQL filter: {jql}", jql.ToString());
             return jql.ToString();
         }
     }
