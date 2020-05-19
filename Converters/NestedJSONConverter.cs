@@ -57,7 +57,7 @@ namespace JIRADataExtractor.Converters
                         element = CustomElements.ContainsKey(element) ? CustomElements[element] : "";
                         if (string.IsNullOrEmpty(element))
                         {
-                            Log.Debug("{0}Custom element not found, will not process this branch any further.", "".PadRight(i));
+                            Log.Debug("{0}Corresponding dictonary entry not found, will not process this branch any further.", "".PadRight(i));
                             break;
                         }
                     }
