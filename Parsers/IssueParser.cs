@@ -34,22 +34,19 @@ namespace JIRADataExtractor.Parsers
         }
         public List<Issue> SearchIssues(List<JQLFilter> jQLFilters, Dictionary<string, string> customElements)
         {
-            StringBuilder jql = new StringBuilder();
-            foreach (JQLFilter jQLFilter in jQLFilters)
-            {
-                if (jql.Length > 0)
-                {
-                    jql.Append(" ").Append(jQLFilter.gate.Value).Append(" ");
-                }
-                jql.Append(jQLFilter.field).Append(jQLFilter.comparison.Value).Append(jQLFilter.value);
-            }
-            if (jql.Length > 0)
-            {
-                jql.Insert(0, "?jql=");
-            }
-            Log.Debug("Running issue search with jql query \"{jql}\"", jql.ToString());
-            string jSONResponse = JIRAConnectionHandler.execute("/rest/api/3/search" + jql.ToString());
+            string jqlFilter = "&" + GetJQLFilter(jQLFilters);
+            int startAt = 15;
+            string jSONResponse = JIRAConnectionHandler.execute("/rest/api/3/search?startAt=" + startAt + jqlFilter);
             Console.WriteLine(jSONResponse);
+            /*
+             {
+   "expand":"schema,names",
+   "startAt":0,
+   "maxResults":50,
+   "total":16,
+   "issues":[
+
+             */
             return null;
         }
 
@@ -60,9 +57,9 @@ namespace JIRADataExtractor.Parsers
 
         private Issue ParseJSON(string jSONResponse, Dictionary<string, string> customElements)
         { 
-            if(Log.IsEnabled(LogEventLevel.Debug))
+            if(Log.IsEnabled(LogEventLevel.Verbose))
             {
-                Log.Debug("{jsonData}", JObject.Parse(jSONResponse).ToString());
+                Log.Verbose("Parsing JSON Object:\n{jsonData}", JObject.Parse(jSONResponse).ToString());
             }
             var settings = new JsonSerializerSettings();
             settings.Converters.Add(new NestedJSONConverter<Issue>(customElements));
