@@ -53,15 +53,20 @@ namespace JIRADataExtractor.Converters
                     {
                         Log.Debug("Custom element {element} found in JsonProperty.", element);
                         element = element.Substring("custom.element.".Length).ToLower();
-                        Log.Verbose("{0}Custom elements dictonary contains element {element}: {containsKey}.", "".PadRight(i), element, CustomElements.ContainsKey(element));
+                        Log.Verbose("{0}Custom element dictonary contains element {element}: {containsKey}.", "".PadRight(i), element, CustomElements.ContainsKey(element));
                         element = CustomElements.ContainsKey(element) ? CustomElements[element] : "";
+                        if (string.IsNullOrEmpty(element))
+                        {
+                            Log.Debug("{0}Custom element not found, will not process this branch any further.", "".PadRight(i));
+                            break;
+                        }
                     }
+
                     Log.Verbose("{0}Getting {element} from jSON.", "".PadRight(i) ,element);
                     jToken = jToken == null ? root[element] : jToken[element];
-
                     if (jToken == null)
                     {
-                        Log.Debug("No token found for element {element} at position {i} in the tree, will not process this branch any further.", element, i);
+                        Log.Debug("{0}No token found for element {element} at position {i} in the tree, will not process this branch any further.", "".PadRight(i), element, i);
                         break;
                     }
                     else
