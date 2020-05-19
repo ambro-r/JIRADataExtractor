@@ -19,16 +19,23 @@ namespace JIRADataExtractor.Parsers
             JIRAConnectionHandler = new JIRAConnectionHandler(userName, password, baseURL);
         }
 
+        protected string GetJQLFilter(JQLFilter jQLFilter)
+        {
+            List<JQLFilter> jQLFilters = new List<JQLFilter>(1);
+            jQLFilters.Add(jQLFilter);
+            return GetJQLFilter(jQLFilters);
+        }
         protected string GetJQLFilter(List<JQLFilter> jQLFilters)
         {
             StringBuilder jql = new StringBuilder();
             foreach (JQLFilter jQLFilter in jQLFilters)
             {
-                if (jql.Length > 0)
+                if (jql.Length > 0 && !string.IsNullOrEmpty(jQLFilter.Gate.Value))
                 {
-                    jql.Append(" ").Append(jQLFilter.gate.Value).Append(" ");
+                    jql.Append(" ").Append(jQLFilter.Gate.Value).Append(" ");
                 }
-                jql.Append(jQLFilter.field).Append(jQLFilter.comparison.Value).Append(jQLFilter.value);
+                jql.Append(jQLFilter.Field).Append(jQLFilter.Comparison.Value)
+                    .Append("\"").Append(jQLFilter.Value).Append("\"");
             }
             if (jql.Length > 0)
             {
