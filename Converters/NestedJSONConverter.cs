@@ -13,10 +13,14 @@ namespace JIRADataExtractor.Converters
     {
 
         private Dictionary<string, string> CustomElements;
+
+        public NestedJSONConverter()
+        {
+            CustomElements = new Dictionary<string, string>();
+        }
         public NestedJSONConverter(Dictionary<string, string> customFields) {
             CustomElements = customFields;
         }
-
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(T);
