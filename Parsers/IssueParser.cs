@@ -1,55 +1,64 @@
 ﻿using JIRADataExtractor.Converters;
+using JIRADataExtractor.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace JIRADataExtractor.Parsers
 {
-    class IssueParser
+    class IssueParser : Parser
     {
-        private JIRAConnectionHandler JIRAConnectionHandler;
-        private IssueParser() { }
-        public IssueParser(JIRAConnectionHandler jIRAConnectionHandler)
+        public IssueParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
-            JIRAConnectionHandler = jIRAConnectionHandler;
         }
-        public IssueParser(String userName, String password, String baseURL)
+        public IssueParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
         {
-            JIRAConnectionHandler = new JIRAConnectionHandler(userName, password, baseURL);
+        }
+        public Issue GetIssue(string issueIdOrKey)
+        {
+            return GetIssue(issueIdOrKey, new Dictionary<string, string>());
+        }
+        public Issue GetIssue(string issueIdOrKey, Dictionary<string, string> customElements)
+        {
+            Log.Information("Getting issue with issueIdOrKey {issueIdOrKey}", issueIdOrKey);
+            return ParseJSON(JIRAConnectionHandler.execute("/rest/api/3/issue/" + issueIdOrKey), customElements);
+        }
+        public List<Issue> SearchIssues(List<JQLFilter> jQLFilters)
+        {
+            return SearchIssues(jQLFilters, new Dictionary<string, string>());
+        }
+        public List<Issue> SearchIssues(List<JQLFilter> jQLFilters, Dictionary<string, string> customElements)
+        {
+            StringBuilder jql = new StringBuilder();
+            foreach (JQLFilter jQLFilter in jQLFilters)
+            {
+                if (jql.Length > 0)
+                {
+                    jql.Append(" ").Append(jQLFilter.gate.Value).Append(" ");
+                }
+                jql.Append(jQLFilter.field).Append(jQLFilter.comparison.Value).Append(jQLFilter.value);
+            }
+            if (jql.Length > 0)
+            {
+                jql.Insert(0, "?jql=");
+            }
+            Log.Debug("Running issue search with jql query \"{jql}\"", jql.ToString());
+            string jSONResponse = JIRAConnectionHandler.execute("/rest/api/3/search" + jql.ToString());
+            Console.WriteLine(jSONResponse);
+            return null;
         }
 
-        public Issue GetIssue(long issueID)
-        {
-            return GetIssue(issueID, new Dictionary<string, string>());
-        }
+        /*
+       * project = PHX AND updated >= 2020-05-11 AND updated <= 2020-05-23 order by created DESC
+       *https://bitventuredev.atlassian.net/browse/PHX-123?jql=project%20%3D%20PHX%20AND%20updated%20%3E%3D%202020-05-11%20AND%20updated%20%3C%3D%202020-05-23%20order%20by%20created%20DESC
+       */
 
-        public Issue GetIssue(long issueID, Dictionary<string, string> customElements)
-        {
-            Log.Information("Getting issue with id {issueID}", issueID);
-            return ParseJSON(Execute(issueID.ToString()), customElements);
-        }
-
-        public Issue GetIssue(string issueKey)
-        {
-            return GetIssue(issueKey, new Dictionary<string, string>());
-        }
-
-        public Issue GetIssue(string issueKey, Dictionary<string, string> customElements)
-        {
-            Log.Information("Getting issue with key {issueKey}", issueKey);
-            return ParseJSON(Execute(issueKey), customElements);
-        }
-
-        private string Execute(string issueIdOrKey)
-        {
-            return JIRAConnectionHandler.execute("/rest/api/3/issue/" + issueIdOrKey);
-        }
-
-        private Issue ParseJSON(String jSONResponse, Dictionary<string, string> customElements)
+        private Issue ParseJSON(string jSONResponse, Dictionary<string, string> customElements)
         { 
             if(Log.IsEnabled(LogEventLevel.Debug))
             {
