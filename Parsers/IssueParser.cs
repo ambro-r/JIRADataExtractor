@@ -1,4 +1,5 @@
-﻿using JIRADataExtractor.Converters;
+﻿using JIRADataExtractor.Constants;
+using JIRADataExtractor.Converters;
 using JIRADataExtractor.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -34,27 +35,28 @@ namespace JIRADataExtractor.Parsers
         }
         public List<Issue> SearchIssues(List<JQLFilter> jQLFilters, Dictionary<string, string> customElements)
         {
-            string jqlFilter = "&" + GetJQLFilter(jQLFilters);
-            int startAt = 15;
-            string jSONResponse = JIRAConnectionHandler.execute("/rest/api/3/search?startAt=" + startAt + jqlFilter);
-            Console.WriteLine(jSONResponse);
-            /*
-             {
-   "expand":"schema,names",
-   "startAt":0,
-   "maxResults":50,
-   "total":16,
-   "issues":[
-
-             */
-            return null;
+            List<Issue> issues = new List<Issue>();
+            int startAt = 0;
+            string jqlFilter = GetJQLFilter(jQLFilters);
+            Log.Information("Searching issues with filter {jqlFilter}", jqlFilter);
+            bool moreResultsAvailable = true;
+            while (moreResultsAvailable) {
+                string jSONResponse = JIRAConnectionHandler.execute("/rest/api/3/search?startAt=" + startAt + "&" + jqlFilter);
+                var jObject = JObject.Parse(jSONResponse);
+                int maxResults = Convert.ToInt32(jObject[JQLSearchResult.MAX_RESULTS]);
+                int totalResults = Convert.ToInt32(jObject[JQLSearchResult.TOTAL]);
+                Log.Debug("Results starting at {startAt} of {totalResults} results (retrieving up to {maxResults} at a time).", startAt, totalResults, maxResults);
+                startAt += maxResults;
+                moreResultsAvailable = startAt < totalResults;
+                Log.Verbose("More results available: {moreResultsAvailable}.", moreResultsAvailable);
+                foreach (JObject issueJSON in jObject["issues"])
+                {
+                    issues.Add(ParseJSON(issueJSON.ToString(), customElements));  
+                }
+            }
+            Log.Information("Issue search has returned {issueCount} issues.", issues.Count);
+            return issues;
         }
-
-        /*
-       * project = PHX AND updated >= 2020-05-11 AND updated <= 2020-05-23 order by created DESC
-       *https://bitventuredev.atlassian.net/browse/PHX-123?jql=project%20%3D%20PHX%20AND%20updated%20%3E%3D%202020-05-11%20AND%20updated%20%3C%3D%202020-05-23%20order%20by%20created%20DESC
-       */
-
         private Issue ParseJSON(string jSONResponse, Dictionary<string, string> customElements)
         { 
             if(Log.IsEnabled(LogEventLevel.Verbose))
