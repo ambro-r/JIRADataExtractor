@@ -1,4 +1,5 @@
 ﻿using JIRADataExtractor.Objects;
+using JIRADataExtractor.Parsers;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
@@ -8,19 +9,14 @@ using System.Text;
 
 namespace JIRADataExtractor
 {
-    class FieldParser
+    class FieldParser : Parser
     {
-        private JIRAConnectionHandler JIRAConnectionHandler;
-        private FieldParser() { }
-        public FieldParser(JIRAConnectionHandler jIRAConnectionHandler)
+        public FieldParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
-            JIRAConnectionHandler = jIRAConnectionHandler;
         }
-        public FieldParser(String userName, String password, String baseURL)
+        public FieldParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
         {
-            JIRAConnectionHandler = new JIRAConnectionHandler(userName, password, baseURL);
         }
-
         public List<Field> GetFields() {
             List<Field> fields = new List<Field>();
             string jSONResponse = JIRAConnectionHandler.execute("/rest/api/3/field");

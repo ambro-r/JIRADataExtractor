@@ -1,25 +1,20 @@
-﻿using Serilog;
+﻿using JIRADataExtractor.Parsers;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace JIRADataExtractor
 {
-    class SprintParser
+    class SprintParser : Parser
     {
         // TO DO: Need to rethink and rework this
-
-        private JIRAConnectionHandler JIRAConnectionHandler;
-        private SprintParser() { }
-        public SprintParser(JIRAConnectionHandler jIRAConnectionHandler)
+        public SprintParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
-            JIRAConnectionHandler = jIRAConnectionHandler;
         }
-        public SprintParser(String userName, String password, String baseURL)
+        public SprintParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
         {
-            JIRAConnectionHandler = new JIRAConnectionHandler(userName, password, baseURL);
         }
-
         public List<Issue> GetSprintIssues(long sprintID)
         {
             return GetSprintIssues(sprintID, new string[] { });
