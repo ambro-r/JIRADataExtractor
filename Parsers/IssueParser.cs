@@ -45,7 +45,7 @@ namespace JIRADataExtractor.Parsers
                 var jObject = JObject.Parse(jSONResponse);
                 int maxResults = Convert.ToInt32(jObject[JQLSearchResult.MAX_RESULTS]);
                 int totalResults = Convert.ToInt32(jObject[JQLSearchResult.TOTAL]);
-                Log.Debug("Results starting at {startAt} of {totalResults} results (retrieving up to {maxResults} at a time).", startAt, totalResults, maxResults);
+                Log.Debug("Getting up to {maxResults} results per search. Current result set starting a {startAt}, total results: {totalResults}.", maxResults, startAt, totalResults);
                 startAt += maxResults;
                 moreResultsAvailable = startAt < totalResults;
                 Log.Verbose("More results available: {moreResultsAvailable}.", moreResultsAvailable);
