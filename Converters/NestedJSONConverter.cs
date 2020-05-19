@@ -48,11 +48,11 @@ namespace JIRADataExtractor.Converters
                 JToken jToken = null;
                 for (var i = 0; i < elements.Length; i++)
                 {
-                    string element = elements[i].ToLower();
+                    string element = elements[i];
                     if (element.StartsWith("custom.element."))
                     {
                         Log.Debug("Custom element {element} found in JsonProperty.", element);
-                        element = element.Substring("custom.element.".Length);
+                        element = element.Substring("custom.element.".Length).ToLower();
                         Log.Verbose("{0}Custom elements dictonary contains element {element}: {containsKey}.", "".PadRight(i), element, CustomElements.ContainsKey(element));
                         element = CustomElements.ContainsKey(element) ? CustomElements[element] : "";
                     }
