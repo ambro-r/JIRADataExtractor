@@ -14,6 +14,9 @@ namespace JIRADataExtractor
         public SprintParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
+        public SprintParser(ConnectionDetails connectionDetails) : base(connectionDetails)
+        {
+        }
         public SprintParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
         {
         }
@@ -36,8 +39,11 @@ namespace JIRADataExtractor
         public List<Issue> GetSprintIssues(String sprintName, String[] customFields)
         {
             Log.Information("Getting issues for sprint with name {sprintName}", sprintName);
-            string jqlFilter = GetJQLFilter(new JQLFilter("Sprint", Comparison.EQUAL_TO, sprintName));
-            return ParseJSON(Execute("/rest/api/3/search?" + jqlFilter, customFields), customFields);
+            List<JQLFilter> jQLFilters = new List<JQLFilter>(1);
+            jQLFilters.Add(new JQLFilter("Sprint", Comparison.EQUAL_TO, sprintName));
+            IssueParser issueParser = new IssueParser(JIRAConnectionHandler);
+            return null;
+          //  return searchParser.search(jQLFilters, customFields);
         }
 
         private string Execute(String unfilteredURI, String[] customFields)

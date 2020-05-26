@@ -17,6 +17,9 @@ namespace JIRADataExtractor.Parsers
         public IssueParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
+        public IssueParser(ConnectionDetails connectionDetails) : base(connectionDetails)
+        {
+        }
         public IssueParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
         {
         }
@@ -51,12 +54,13 @@ namespace JIRADataExtractor.Parsers
                 Log.Verbose("More results available: {moreResultsAvailable}.", moreResultsAvailable);
                 foreach (JObject issueJSON in jObject["issues"])
                 {
-                    issues.Add(ParseJSON(issueJSON.ToString(), customElements));  
+                    issues.Add(ParseJSON<Issue>(issueJSON.ToString(), customElements));  
                 }
             }
             Log.Information("Issue search has returned {issueCount} issues.", issues.Count);
             return issues;
         }
+        /*
         private Issue ParseJSON(string jSONResponse, Dictionary<string, string> customElements)
         { 
             if(Log.IsEnabled(LogEventLevel.Verbose))
@@ -67,6 +71,7 @@ namespace JIRADataExtractor.Parsers
             settings.Converters.Add(new NestedJSONConverter<Issue>(customElements));
             return JsonConvert.DeserializeObject<Issue>(jSONResponse, settings);
         }
+        */
 
     }
 }

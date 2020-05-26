@@ -18,6 +18,9 @@ namespace JIRADataExtractor.Parsers
         public BoardParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
+        public BoardParser(ConnectionDetails connectionDetails) : base(connectionDetails)
+        {
+        }
         public BoardParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
         {
         }
@@ -47,24 +50,6 @@ namespace JIRADataExtractor.Parsers
         {
             Log.Information("Getting board with boardID {boardID}", boardID);
             return ParseJSON<Board>(JIRAConnectionHandler.execute("/rest/agile/1.0/board/" + boardID));
-        }
-        private T ParseJSON<T>(string jSONResponse)
-        {
-            if (Log.IsEnabled(LogEventLevel.Verbose))
-            {
-                Log.Verbose("Parsing JSON Object:\n{jsonData}", JObject.Parse(jSONResponse).ToString());
-            }
-            Type objectType = typeof(T);
-            var settings = new JsonSerializerSettings();
-            if (objectType.Equals(typeof(Board)))
-            {
-                settings.Converters.Add(new NestedJSONConverter<Board>());
-            }
-            else if (objectType.Equals(typeof(Sprint)))
-            {
-                settings.Converters.Add(new NestedJSONConverter<Sprint>());
-            }
-            return JsonConvert.DeserializeObject<T>(jSONResponse, settings);
         }
 
     }

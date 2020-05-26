@@ -14,9 +14,13 @@ namespace JIRADataExtractor
         public FieldParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
+        public FieldParser(ConnectionDetails connectionDetails) : base(connectionDetails)
+        {
+        }
         public FieldParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
         {
         }
+
         public List<Field> GetFields() {
             List<Field> fields = new List<Field>();
             string jSONResponse = JIRAConnectionHandler.execute("/rest/api/3/field");

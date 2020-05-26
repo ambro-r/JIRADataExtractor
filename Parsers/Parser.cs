@@ -1,5 +1,10 @@
-﻿using JIRADataExtractor.Objects;
+﻿using JIRADataExtractor.Constants;
+using JIRADataExtractor.Converters;
+using JIRADataExtractor.Objects;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Serilog;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +18,10 @@ namespace JIRADataExtractor.Parsers
         protected Parser(JIRAConnectionHandler jIRAConnectionHandler)
         {
             JIRAConnectionHandler = jIRAConnectionHandler;
+        }
+        public Parser(ConnectionDetails connectionDetails) 
+        {
+            JIRAConnectionHandler = new JIRAConnectionHandler(connectionDetails.UserName, connectionDetails.Password, connectionDetails.BaseURL);
         }
         protected Parser(String userName, String password, String baseURL)
         {
@@ -43,5 +52,34 @@ namespace JIRADataExtractor.Parsers
             }
             return jql.ToString();
         }
+
+        protected T ParseJSON<T>(string jSONResponse)
+        {
+            return ParseJSON<T>(jSONResponse, new Dictionary<string, string>(0));
+        }
+
+        protected T ParseJSON<T>(string jSONResponse, Dictionary<string, string> customElements)
+        {
+            if (Log.IsEnabled(LogEventLevel.Verbose))
+            {
+                Log.Verbose("Parsing JSON Object:\n{jsonData}", JObject.Parse(jSONResponse).ToString());
+            }
+            Type objectType = typeof(T);
+            var settings = new JsonSerializerSettings();
+            if (objectType.Equals(typeof(Board)))
+            {
+                settings.Converters.Add(new NestedJSONConverter<Board>());
+            }
+            else if (objectType.Equals(typeof(Sprint)))
+            {
+                settings.Converters.Add(new NestedJSONConverter<Sprint>());
+            }
+            else if (objectType.Equals(typeof(Issue)))
+            {
+                settings.Converters.Add(new NestedJSONConverter<Issue>(customElements));
+            }
+            return JsonConvert.DeserializeObject<T>(jSONResponse, settings);
+        }
+
     }
 }
