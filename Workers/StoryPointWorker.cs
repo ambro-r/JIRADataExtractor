@@ -1,6 +1,7 @@
 ﻿using JIRADataExtractor.Constants;
 using JIRADataExtractor.Exceptions;
 using JIRADataExtractor.Objects;
+using JIRADataExtractor.Parsers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,9 +25,16 @@ namespace JIRADataExtractor.Workers
             }
             if(string.IsNullOrEmpty(storyPointsField))
             {
-                throw new WorkerInitializationException(string.Format("Unable to find key for field {0}", Fields.STORY_POINTS));
+                throw new WorkerInitializationException(string.Format("Unable to find key for field \"{0}\"", Fields.STORY_POINTS));
             }
         }
+
+
+        public void run(ConnectionDetails connectionDetails)
+        {
+            IssueParser issueParser = new IssueParser(connectionDetails);
+        }
+
 
     }
 
