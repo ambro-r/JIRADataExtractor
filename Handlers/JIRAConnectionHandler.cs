@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace JIRADataExtractor
+namespace JIRADataExtractor.Handlers
 {
     class JIRAConnectionHandler
     {

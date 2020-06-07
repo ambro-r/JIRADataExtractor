@@ -1,5 +1,6 @@
 ﻿using JIRADataExtractor.Constants;
 using JIRADataExtractor.Converters;
+using JIRADataExtractor.Handlers;
 using JIRADataExtractor.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,7 +31,7 @@ namespace JIRADataExtractor.Parsers
         public Issue GetIssue(string issueIdOrKey, Dictionary<string, string> customElements)
         {
             Log.Information("Getting issue with issueIdOrKey {issueIdOrKey}", issueIdOrKey);
-            return ParseJSON(JIRAConnectionHandler.execute("/rest/api/3/issue/" + issueIdOrKey), customElements);
+            return ParseJSON<Issue>(JIRAConnectionHandler.execute("/rest/api/3/issue/" + issueIdOrKey), customElements);
         }
         public List<Issue> SearchIssues(List<JQLFilter> jQLFilters)
         {

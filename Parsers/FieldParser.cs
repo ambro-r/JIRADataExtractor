@@ -1,4 +1,5 @@
-﻿using JIRADataExtractor.Objects;
+﻿using JIRADataExtractor.Handlers;
+using JIRADataExtractor.Objects;
 using JIRADataExtractor.Parsers;
 using Newtonsoft.Json.Linq;
 using Serilog;
