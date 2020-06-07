@@ -37,6 +37,7 @@ namespace JIRADataExtractor.Parsers
         {
             return SearchIssues(jQLFilters, new Dictionary<string, string>());
         }
+        // TO DO : For seaching, need to find a way to ony return certain fields (i.e. Might only want a list of Issue Keys)
         public List<Issue> SearchIssues(List<JQLFilter> jQLFilters, Dictionary<string, string> customElements)
         {
             List<Issue> issues = new List<Issue>();
@@ -61,18 +62,6 @@ namespace JIRADataExtractor.Parsers
             Log.Information("Issue search has returned {issueCount} issues.", issues.Count);
             return issues;
         }
-        /*
-        private Issue ParseJSON(string jSONResponse, Dictionary<string, string> customElements)
-        { 
-            if(Log.IsEnabled(LogEventLevel.Verbose))
-            {
-                Log.Verbose("Parsing JSON Object:\n{jsonData}", JObject.Parse(jSONResponse).ToString());
-            }
-            var settings = new JsonSerializerSettings();
-            settings.Converters.Add(new NestedJSONConverter<Issue>(customElements));
-            return JsonConvert.DeserializeObject<Issue>(jSONResponse, settings);
-        }
-        */
 
     }
 }

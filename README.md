@@ -14,6 +14,13 @@ This project uses the following packages:
 * Serilog.Sinks.Console
 * Serilog.Sinks.File
 
+## To Do
+
+Genearlly this would also be in the respective class, but it's here as a reminder as well...
+
+* IssueParser: When seaching, need to find a way to ony return certain fields (i.e. might only want a list of Issue Keys)
+* SprintParser: Need to re-think and possibly re-do some of the logic. 
+
 Just some VERY useful tools and API links:
 * [JSON Formatter & Validator][1.1]
 * [QuickType][1.2] : Convert JSON into gorgeous, typesafe code in any language.

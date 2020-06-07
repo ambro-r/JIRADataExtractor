@@ -11,7 +11,7 @@ namespace JIRADataExtractor
 {
     class SprintParser : Parser
     {
-        // TO DO: Need to rethink and rework this
+        // TO DO: Need to re-think and possibly re-do some of the logic. 
         public SprintParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
