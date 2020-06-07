@@ -26,7 +26,7 @@ namespace JIRADataExtractor.Parsers
         {
         }
 
-        public Board GetBoard(int boardID)
+        public Board GetBoard(long boardID)
         {
             Log.Information("Getting board with boardID {boardID}", boardID);
             return ParseJSON<Board>(JIRAConnectionHandler.execute("/rest/agile/1.0/board/" + boardID));
