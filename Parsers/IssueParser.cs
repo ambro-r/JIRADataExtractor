@@ -33,11 +33,20 @@ namespace JIRADataExtractor.Parsers
             Log.Information("Getting issue with issueIdOrKey {issueIdOrKey}", issueIdOrKey);
             return ParseJSON<Issue>(JIRAConnectionHandler.execute("/rest/api/3/issue/" + issueIdOrKey), customElements);
         }
+
+        // TO DO : Need to build a proper object to represent the ChangeLog
+        public string GetIssueChangeLog(string issueIdOrKey)
+        {
+            Log.Information("Getting issue changelog with issueIdOrKey {issueIdOrKey}", issueIdOrKey);
+            return JIRAConnectionHandler.execute("/rest/api/3/issue/" + issueIdOrKey + "?expand=changelog&fields=\"\"");
+            
+        }
         public List<Issue> SearchIssues(List<JQLFilter> jQLFilters)
         {
             return SearchIssues(jQLFilters, new Dictionary<string, string>());
         }
         // TO DO : When seaching, need to find a way to ony return certain fields (i.e. might only want a list of Issue Keys)
+        // -> Need to append &fields= for a field list
         public List<Issue> SearchIssues(List<JQLFilter> jQLFilters, Dictionary<string, string> customElements)
         {
             List<Issue> issues = new List<Issue>();
