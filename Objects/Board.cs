@@ -23,7 +23,7 @@ namespace JIRADataExtractor.Objects
         public override string ToString()
         {
             return new StringBuilder("[Board:")
-                .Append(", id=").Append(Id)
+                .Append("id=").Append(Id)
                 .Append(", name=").Append(Name)
                 .Append(", projectName=").Append(ProjectName)
                 .Append(", projectKey=").Append(ProjectKey)

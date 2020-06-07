@@ -19,7 +19,7 @@ namespace JIRADataExtractor.Objects
         public override string ToString()
         {
             return new StringBuilder("[Field:")
-                .Append(", id=").Append(Id)
+                .Append("id=").Append(Id)
                 .Append(", Key=").Append(Key)
                 .Append(", name=").Append(Name)
                 .Append(", custom=").Append(Custom)

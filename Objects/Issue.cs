@@ -50,7 +50,7 @@ namespace JIRADataExtractor
 
         public override string ToString() {
             return new StringBuilder("[Issue:")
-                .Append(", id=").Append(Id)
+                .Append("id=").Append(Id)
                 .Append(", Key=").Append(Key)
                 .Append(", CreatedDate=").Append(CreatedDate)
                 .Append(", Priority=").Append(Priority)
