@@ -1,5 +1,6 @@
 ﻿using JIRADataExtractor.Constants;
 using JIRADataExtractor.Converters;
+using JIRADataExtractor.Handlers;
 using JIRADataExtractor.Objects;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
@@ -25,7 +26,18 @@ namespace JIRADataExtractor.Parsers
         {
         }
 
-        public List<Sprint> GetSprints(int boardID)
+        public Board GetBoard(int boardID)
+        {
+            Log.Information("Getting board with boardID {boardID}", boardID);
+            return ParseJSON<Board>(JIRAConnectionHandler.execute("/rest/agile/1.0/board/" + boardID));
+        }
+
+        public List<Sprint> GetSprints(Board board)
+        {
+            return GetSprints(board.Id);
+        }
+
+        public List<Sprint> GetSprints(long boardID)
         {
             Log.Information("Getting sprints for board with boardID {boardID}", boardID);
             List<Sprint> sprints = new List<Sprint>();
@@ -38,18 +50,21 @@ namespace JIRADataExtractor.Parsers
                 int maxResults = Convert.ToInt32(jObject[JQLSearchResult.MAX_RESULTS]);
                 isLast = Convert.ToBoolean(jObject[JQLSearchResult.IS_LAST]);
                 Log.Debug("Getting up to {maxResults} results per search. Current result set starting a {startAt}, is last: {isLast}.", maxResults, startAt, isLast);
-                foreach (JObject sprintJSON in jObject[JQLSearchResult.VALUES])
+                if (jObject[JQLSearchResult.VALUES] != null)
                 {
-                    sprints.Add(ParseJSON<Sprint>(sprintJSON.ToString()));
+                    foreach (JObject sprintJSON in jObject[JQLSearchResult.VALUES])
+                    {
+                        sprints.Add(ParseJSON<Sprint>(sprintJSON.ToString()));
+                    }
+                }
+                else
+                {                                  
+                    Log.Information("No sprints found for board with boardID {boardID}", boardID);
+                    break; // Break out the loop
                 }
             }
             Log.Information("Board with boardID {boardID} has {sprintCount} issues.", boardID, sprints.Count);
             return sprints;
-        }
-        public Board GetBoard(int boardID)
-        {
-            Log.Information("Getting board with boardID {boardID}", boardID);
-            return ParseJSON<Board>(JIRAConnectionHandler.execute("/rest/agile/1.0/board/" + boardID));
         }
 
     }
