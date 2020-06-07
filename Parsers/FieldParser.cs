@@ -1,4 +1,5 @@
-﻿using JIRADataExtractor.Handlers;
+﻿using JIRADataExtractor.Constants;
+using JIRADataExtractor.Handlers;
 using JIRADataExtractor.Objects;
 using JIRADataExtractor.Parsers;
 using Newtonsoft.Json.Linq;
@@ -20,6 +21,20 @@ namespace JIRADataExtractor
         }
         public FieldParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
         {
+        }
+
+        public Dictionary<string, string> GetCustomElements()
+        {
+            List<Field> fields = GetFields();
+            Dictionary<string, string> customElements = new Dictionary<string, string>();
+            foreach (Field field in fields)
+            {
+                if(string.Equals(field.Key, Fields.CUSTOM_SPRINT, StringComparison.OrdinalIgnoreCase))
+                {
+                    customElements.Add(field.Name.ToLower(), Fields.CUSTOM_SPRINT.ToLower());
+                }
+            }
+            return customElements;
         }
 
         public List<Field> GetFields() {
