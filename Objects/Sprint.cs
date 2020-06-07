@@ -25,5 +25,17 @@ namespace JIRADataExtractor.Objects
 
         [JsonProperty("completeDate")]
         public DateTime CompleteDate { get; set; }
+
+        public override string ToString()
+        {
+            return new StringBuilder("[Sprint:")
+                .Append("id=").Append(Id)
+                .Append(", State=").Append(State)
+                .Append(", Name=").Append(Name)
+                .Append(", StartDate=").Append(StartDate)
+                .Append(", EndDate=").Append(EndDate)
+                .Append(", CompleteDate=").Append(CompleteDate)
+                .Append("]").ToString();
+        }
     }
 }
