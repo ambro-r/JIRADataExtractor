@@ -18,7 +18,9 @@ This project uses the following packages:
 
 Genearlly this would also be in the respective class, but it's here as a reminder as well...
 
-* IssueParser: When seaching, need to find a way to ony return certain fields (i.e. might only want a list of Issue Keys)
+* IssueParser: When seaching, need to find a way to ony return certain fields (i.e. might only want a list of Issue Keys).
+* IssueParser: Need to build a proper object to represent the ChangeLog.
+* SprintReport: Need to parse through the change log to figure out if the issue had anything to do with the sprint.
 * SprintParser: Need to re-think and possibly re-do some of the logic. 
 
 Just some VERY useful tools and API links:
