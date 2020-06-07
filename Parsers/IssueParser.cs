@@ -37,7 +37,7 @@ namespace JIRADataExtractor.Parsers
         {
             return SearchIssues(jQLFilters, new Dictionary<string, string>());
         }
-        // TO DO : For seaching, need to find a way to ony return certain fields (i.e. Might only want a list of Issue Keys)
+        // TO DO : When seaching, need to find a way to ony return certain fields (i.e. might only want a list of Issue Keys)
         public List<Issue> SearchIssues(List<JQLFilter> jQLFilters, Dictionary<string, string> customElements)
         {
             List<Issue> issues = new List<Issue>();
