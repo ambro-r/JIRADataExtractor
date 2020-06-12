@@ -1,7 +1,7 @@
 ﻿using JIRADataExtractor.Constants;
 using JIRADataExtractor.Converters;
 using JIRADataExtractor.Handlers;
-using JIRADataExtractor.Objects;
+using JIRADataExtractor.Models;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

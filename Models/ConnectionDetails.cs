@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace JIRADataExtractor.Objects
+namespace JIRADataExtractor.Models
 {
     class ConnectionDetails
     {

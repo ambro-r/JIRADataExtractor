@@ -1,6 +1,6 @@
 ﻿using JIRADataExtractor.Constants;
 using JIRADataExtractor.Exceptions;
-using JIRADataExtractor.Objects;
+using JIRADataExtractor.Models;
 using JIRADataExtractor.Parsers;
 using System;
 using System.Collections.Generic;

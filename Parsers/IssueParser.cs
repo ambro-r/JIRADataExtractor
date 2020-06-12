@@ -1,7 +1,7 @@
 ﻿using JIRADataExtractor.Constants;
 using JIRADataExtractor.Converters;
 using JIRADataExtractor.Handlers;
-using JIRADataExtractor.Objects;
+using JIRADataExtractor.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
