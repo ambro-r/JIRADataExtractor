@@ -16,7 +16,7 @@ namespace JIRADataExtractor
         public FieldParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
-        public FieldParser(ConnectionDetails connectionDetails) : base(connectionDetails)
+        public FieldParser(Connection connection) : base(connection)
         {
         }
         public FieldParser(String userName, String password, String baseURL) : base(userName, password, baseURL)

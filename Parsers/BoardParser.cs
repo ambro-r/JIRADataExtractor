@@ -19,7 +19,7 @@ namespace JIRADataExtractor.Parsers
         public BoardParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
-        public BoardParser(ConnectionDetails connectionDetails) : base(connectionDetails)
+        public BoardParser(Connection connection) : base(connection)
         {
         }
         public BoardParser(String userName, String password, String baseURL) : base(userName, password, baseURL)

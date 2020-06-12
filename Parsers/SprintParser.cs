@@ -15,7 +15,7 @@ namespace JIRADataExtractor
         public SprintParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
-        public SprintParser(ConnectionDetails connectionDetails) : base(connectionDetails)
+        public SprintParser(Connection connection) : base(connection)
         {
         }
         public SprintParser(String userName, String password, String baseURL) : base(userName, password, baseURL)

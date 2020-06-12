@@ -20,9 +20,9 @@ namespace JIRADataExtractor.Parsers
         {
             JIRAConnectionHandler = jIRAConnectionHandler;
         }
-        public Parser(ConnectionDetails connectionDetails) 
+        public Parser(Connection connection) 
         {
-            JIRAConnectionHandler = new ConnectionHandler(connectionDetails.UserName, connectionDetails.Password, connectionDetails.BaseURL);
+            JIRAConnectionHandler = new ConnectionHandler(connection.UserName, connection.Password, connection.BaseURL);
         }
         protected Parser(String userName, String password, String baseURL)
         {

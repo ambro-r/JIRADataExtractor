@@ -30,7 +30,7 @@ namespace JIRADataExtractor.Workers
         }
 
 
-        public void run(ConnectionDetails connectionDetails)
+        public void run(Connection connectionDetails)
         {
             IssueParser issueParser = new IssueParser(connectionDetails);
         }

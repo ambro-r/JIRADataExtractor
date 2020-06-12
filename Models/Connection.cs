@@ -4,7 +4,7 @@ using System.Text;
 
 namespace JIRADataExtractor.Models
 {
-    class ConnectionDetails
+    class Connection
     {
         public string UserName { get; set; }
  

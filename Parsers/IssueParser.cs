@@ -18,7 +18,7 @@ namespace JIRADataExtractor.Parsers
         public IssueParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
-        public IssueParser(ConnectionDetails connectionDetails) : base(connectionDetails)
+        public IssueParser(Connection connection) : base(connection)
         {
         }
         public IssueParser(String userName, String password, String baseURL) : base(userName, password, baseURL)
