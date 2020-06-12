@@ -9,9 +9,9 @@ namespace JIRADataExtractor.Reports
     class Report
     {
 
-        protected JIRAConnectionHandler JIRAConnectionHandler;
+        protected ConnectionHandler JIRAConnectionHandler;
         protected Report() { }
-        protected Report(JIRAConnectionHandler jIRAConnectionHandler)
+        protected Report(ConnectionHandler jIRAConnectionHandler)
         {
             JIRAConnectionHandler = jIRAConnectionHandler;
         }

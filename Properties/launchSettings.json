@@ -3,7 +3,7 @@
     "JIRA Data Extractor": {
       "commandName": "Project",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "run"
+        "DOTNET_ENVIRONMENT": "development"
       }
     }
   }

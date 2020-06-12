@@ -6,15 +6,15 @@ using System.Text;
 
 namespace JIRADataExtractor.Handlers
 {
-    class JIRAConnectionHandler
+    class ConnectionHandler
     {
 
         private string UserName;
         private string Password;
         private string BaseUrl;
-        private JIRAConnectionHandler() { }
+        private ConnectionHandler() { }
 
-        public JIRAConnectionHandler(String userName, String password, String baseURL)
+        public ConnectionHandler(String userName, String password, String baseURL)
         {
             this.UserName = userName;
             this.Password = password;
@@ -28,7 +28,7 @@ namespace JIRADataExtractor.Handlers
             return Convert.ToBase64String(byteCredentials);
         }
 
-        public string execute(string url)
+        public string BasicAuthentication(string url)
         {
             Log.Debug("Excuting request to {url}", url);
             var client = new RestClient(BaseUrl + url);

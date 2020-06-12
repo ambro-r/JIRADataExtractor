@@ -16,7 +16,7 @@ namespace JIRADataExtractor.Parsers
 {
     class BoardParser : Parser
     {
-        public BoardParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
+        public BoardParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
         public BoardParser(ConnectionDetails connectionDetails) : base(connectionDetails)
@@ -29,7 +29,7 @@ namespace JIRADataExtractor.Parsers
         public Board GetBoard(long boardID)
         {
             Log.Information("Getting board with boardID {boardID}", boardID);
-            return ParseJSON<Board>(JIRAConnectionHandler.execute("/rest/agile/1.0/board/" + boardID));
+            return ParseJSON<Board>(JIRAConnectionHandler.BasicAuthentication("/rest/agile/1.0/board/" + boardID));
         }
 
         public List<Sprint> GetSprints(Board board)
@@ -45,7 +45,7 @@ namespace JIRADataExtractor.Parsers
             bool isLast = false;
             while (!isLast)
             {
-                string jSONResponse = JIRAConnectionHandler.execute("/rest/agile/1.0/board/" + boardID + "/sprint?startAt=" + startAt);
+                string jSONResponse = JIRAConnectionHandler.BasicAuthentication("/rest/agile/1.0/board/" + boardID + "/sprint?startAt=" + startAt);
                 var jObject = JObject.Parse(jSONResponse);
                 int maxResults = Convert.ToInt32(jObject[JQLSearchResult.MAX_RESULTS]);
                 isLast = Convert.ToBoolean(jObject[JQLSearchResult.IS_LAST]);

@@ -13,7 +13,7 @@ namespace JIRADataExtractor
 {
     class FieldParser : Parser
     {
-        public FieldParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
+        public FieldParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
         public FieldParser(ConnectionDetails connectionDetails) : base(connectionDetails)
@@ -39,7 +39,7 @@ namespace JIRADataExtractor
 
         public List<Field> GetFields() {
             List<Field> fields = new List<Field>();
-            string jSONResponse = JIRAConnectionHandler.execute("/rest/api/3/field");
+            string jSONResponse = JIRAConnectionHandler.BasicAuthentication("/rest/api/3/field");
             JArray jsonArray = JArray.Parse(jSONResponse);
             Log.Debug("Returned JSON response is an array with {count} elements.", jsonArray.Count);
             foreach (var element in jsonArray) {

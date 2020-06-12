@@ -12,7 +12,7 @@ namespace JIRADataExtractor
     class SprintParser : Parser
     {
         // TO DO: Need to re-think and possibly re-do some of the logic. 
-        public SprintParser(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
+        public SprintParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
         public SprintParser(ConnectionDetails connectionDetails) : base(connectionDetails)
@@ -49,7 +49,7 @@ namespace JIRADataExtractor
 
         private string Execute(String unfilteredURI, String[] customFields)
         {
-            return JIRAConnectionHandler.execute(unfilteredURI);
+            return JIRAConnectionHandler.BasicAuthentication(unfilteredURI);
         }
 
         private List<Issue> ParseJSON(String jSONResponse, String[] customFields)

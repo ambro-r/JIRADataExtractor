@@ -13,12 +13,12 @@ namespace JIRADataExtractor
     class LastCompletedSprint
     {
 
-        private JIRAConnectionHandler JIRAConnectionHandler;
+        private ConnectionHandler JIRAConnectionHandler;
         private LastCompletedSprint() { }
 
         public LastCompletedSprint(String userName, String password, String baseURL)
         {
-            JIRAConnectionHandler = new JIRAConnectionHandler(userName, password, baseURL);
+            JIRAConnectionHandler = new ConnectionHandler(userName, password, baseURL);
         }
         /*
         public void sprints(long boardId)

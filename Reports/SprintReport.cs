@@ -11,7 +11,7 @@ namespace JIRADataExtractor.Reports
 {
     class SprintReport : Report
     {
-        public SprintReport(JIRAConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
+        public SprintReport(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
         {
         }
 
