@@ -12,7 +12,7 @@ namespace JIRADataExtractor
     class SprintParser : Parser
     {
         // TO DO: Need to re-think and possibly re-do some of the logic. 
-        public SprintParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
+        public SprintParser(ConnectionHandler connectionHandler) : base(connectionHandler)
         {
         }
         public SprintParser(Connection connection) : base(connection)
@@ -42,14 +42,14 @@ namespace JIRADataExtractor
             Log.Information("Getting issues for sprint with name {sprintName}", sprintName);
             List<JQLFilter> jQLFilters = new List<JQLFilter>(1);
             jQLFilters.Add(new JQLFilter("Sprint", Comparison.EQUAL_TO, sprintName));
-            IssueParser issueParser = new IssueParser(JIRAConnectionHandler);
+            IssueParser issueParser = new IssueParser(ConnectionHandler);
             return null;
           //  return searchParser.search(jQLFilters, customFields);
         }
 
         private string Execute(String unfilteredURI, String[] customFields)
         {
-            return JIRAConnectionHandler.BasicAuthentication(unfilteredURI);
+            return ConnectionHandler.BasicAuthentication(unfilteredURI);
         }
 
         private List<Issue> ParseJSON(String jSONResponse, String[] customFields)

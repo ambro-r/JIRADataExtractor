@@ -14,19 +14,19 @@ namespace JIRADataExtractor.Parsers
 {
     class Parser
     {
-        protected ConnectionHandler JIRAConnectionHandler;
+        protected ConnectionHandler ConnectionHandler;
         protected Parser() { }
-        protected Parser(ConnectionHandler jIRAConnectionHandler)
+        protected Parser(ConnectionHandler connectionHandler)
         {
-            JIRAConnectionHandler = jIRAConnectionHandler;
+            ConnectionHandler = connectionHandler;
         }
         public Parser(Connection connection) 
         {
-            JIRAConnectionHandler = new ConnectionHandler(connection.UserName, connection.Password, connection.BaseURL);
+            ConnectionHandler = new ConnectionHandler(connection.UserName, connection.Password, connection.BaseURL);
         }
         protected Parser(String userName, String password, String baseURL)
         {
-            JIRAConnectionHandler = new ConnectionHandler(userName, password, baseURL);
+            ConnectionHandler = new ConnectionHandler(userName, password, baseURL);
         }
 
         protected string GetJQLFilter(JQLFilter jQLFilter)

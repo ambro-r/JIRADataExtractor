@@ -15,7 +15,7 @@ namespace JIRADataExtractor.Parsers
 {
     class IssueParser : Parser
     {
-        public IssueParser(ConnectionHandler jIRAConnectionHandler) : base(jIRAConnectionHandler)
+        public IssueParser(ConnectionHandler connectionHandler) : base(connectionHandler)
         {
         }
         public IssueParser(Connection connection) : base(connection)
@@ -31,14 +31,14 @@ namespace JIRADataExtractor.Parsers
         public Issue GetIssue(string issueIdOrKey, Dictionary<string, string> customElements)
         {
             Log.Information("Getting issue with issueIdOrKey {issueIdOrKey}", issueIdOrKey);
-            return ParseJSON<Issue>(JIRAConnectionHandler.BasicAuthentication("/rest/api/3/issue/" + issueIdOrKey), customElements);
+            return ParseJSON<Issue>(ConnectionHandler.BasicAuthentication("/rest/api/3/issue/" + issueIdOrKey), customElements);
         }
 
         // TO DO : Need to build a proper object to represent the ChangeLog
         public string GetIssueChangeLog(string issueIdOrKey)
         {
             Log.Information("Getting issue changelog with issueIdOrKey {issueIdOrKey}", issueIdOrKey);
-            return JIRAConnectionHandler.BasicAuthentication("/rest/api/3/issue/" + issueIdOrKey + "?expand=changelog&fields=\"\"");
+            return ConnectionHandler.BasicAuthentication("/rest/api/3/issue/" + issueIdOrKey + "?expand=changelog&fields=\"\"");
             
         }
         public List<Issue> SearchIssues(List<JQLFilter> jQLFilters)
@@ -55,7 +55,7 @@ namespace JIRADataExtractor.Parsers
             Log.Information("Searching issues with filter {jqlFilter}", jqlFilter);
             bool moreResultsAvailable = true;
             while (moreResultsAvailable) {
-                string jSONResponse = JIRAConnectionHandler.BasicAuthentication("/rest/api/3/search?startAt=" + startAt + "&" + jqlFilter);
+                string jSONResponse = ConnectionHandler.BasicAuthentication("/rest/api/3/search?startAt=" + startAt + "&" + jqlFilter);
                 var jObject = JObject.Parse(jSONResponse);
                 int maxResults = Convert.ToInt32(jObject[JQLSearchResult.MAX_RESULTS]);
                 int totalResults = Convert.ToInt32(jObject[JQLSearchResult.TOTAL]);
